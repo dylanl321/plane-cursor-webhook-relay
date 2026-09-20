@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "plane-cursor-webhook-relay"
+version = "0.1.0"
+description = "Secure Plane to Cursor webhook relay with an admin REST API"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "anyio==4.10.0",
+  "fastapi==0.116.1",
+  "httpx==0.28.1",
+  "uvicorn[standard]==0.35.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy==1.17.1",
+  "pytest==8.4.2",
+  "pytest-asyncio==1.1.0",
+  "ruff==0.12.11",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/relay"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "S"]
+ignore = ["S101"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["relay"]
