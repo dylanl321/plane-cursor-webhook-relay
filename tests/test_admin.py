@@ -84,6 +84,16 @@ def test_patch_can_rotate_and_clear_secrets(tmp_path):
     assert rotated.json()["has_token"] is True
     assert rotated.json()["has_plane_secret"] is False
 
+    for field in (
+        "enabled",
+        "cursor_webhook_url",
+        "cursor_bearer_token",
+        "description",
+        "forward_plane_headers",
+    ):
+        rejected = c.patch("/admin/routes/nightplot-intake", headers=ADMIN, json={field: None})
+        assert rejected.status_code == 422, field
+
 
 def test_route_id_and_webhook_url_are_validated(tmp_path):
     c = client(tmp_path)

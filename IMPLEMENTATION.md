@@ -30,6 +30,13 @@ Nightplot intake / Grok Bot
 
 ## Validation log
 
-- GitHub repository created as private: `dylanl321/plane-cursor-webhook-relay`.
-- Unit/API tests developed test-first; 12 tests passing before packaging.
-- Remaining: static gates, container build/smoke, TrueNAS deployment, NPM TLS host, live acceptance.
+- Public GitHub repository: `https://github.com/dylanl321/plane-cursor-webhook-relay`.
+- Unit/API tests developed test-first; 12 tests pass with no warnings.
+- Ruff formatting/lint and strict mypy pass.
+- GitHub Actions CI passes, including a clean Linux Docker image build.
+- TrueNAS custom app `plane-cursor-webhook-relay` is running on `10.0.0.10:8787` with a persistent named volume.
+- Nginx Proxy Manager host ID 36 and Let's Encrypt certificate ID 43 expose `https://webhook-relay.home.dlewis.me`.
+- Direct and TLS `/healthz` both return 200; unauthenticated admin returns 401.
+- Live TLS acceptance against an external echo upstream proved raw JSON forwarding, Plane header pass-through, bearer injection, successful delivery deduplication, admin `/test`, metadata-only delivery records, and CRUD cleanup.
+- A real TrueNAS stop/start cycle proved SQLite route persistence and service recovery.
+- Cursor-specific acceptance remains intentionally unrun until a real Cursor webhook URL and bearer token are installed through the admin API; no credentials were supplied or committed.

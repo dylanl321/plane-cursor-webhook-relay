@@ -1,8 +1,8 @@
 import re
-from typing import Any
+from typing import Any, Self
 from urllib.parse import urlparse
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 ROUTE_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$")
 
@@ -51,6 +51,14 @@ class RoutePatch(BaseModel):
     @classmethod
     def validate_optional_url(cls, value: str | None) -> str | None:
         return validate_webhook_url(value) if value is not None else None
+
+    @model_validator(mode="after")
+    def reject_null_for_required_route_fields(self) -> Self:
+        nullable_only = {"plane_secret"}
+        for field in self.model_fields_set - nullable_only:
+            if getattr(self, field) is None:
+                raise ValueError(f"{field} cannot be null")
+        return self
 
 
 class Route(RouteCreate):
